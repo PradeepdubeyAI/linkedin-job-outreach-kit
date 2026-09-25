@@ -5,8 +5,8 @@ your resume to them. Runs entirely on **your own logged-in LinkedIn account** in
 **your own Chrome** — no API keys, no paid service, no third-party scraper, no
 login automation, no password ever typed by a script.
 
-Built and debugged over several real runs. ~1,500 recruiters contacted. Every
-number and warning in this document is measured, not guessed.
+Built and debugged over many real outreach runs, across thousands of contacts.
+Every number and warning in this document is measured, not guessed.
 
 ---
 
@@ -16,7 +16,7 @@ number and warning in this document is measured, not guessed.
 |---|---|
 | `harvest.js` | The extractor. Injected into your LinkedIn tab; pulls contacts out of each post |
 | `scrape.py` | Driver. Walks every query in `queries.txt`, runs the extractor, writes `leads.csv` |
-| `queries.txt` | 75 search queries (AI / ML / data roles in India) |
+| `queries.txt` | 25 search queries (AI / ML / data roles in India) |
 | `report.py` | Renders `leads.csv` as a browsable HTML report |
 | `build_send_list.py` | Filters, dedupes, MX-validates, splits into per-account send lists |
 | `send.py` | Gmail SMTP mailer — throttled, resumable, multi-account |
@@ -206,7 +206,7 @@ python3 scrape.py --limit 2
 
 Then check `leads.csv` actually has rows with emails and authors. If it's empty,
 stop and fix it — see Troubleshooting. Skipping this test and going straight to
-75 queries is how you waste 100 minutes on a broken run.
+the full list is how you waste 30+ minutes on a broken run.
 
 Then the full pass — **run it under `caffeinate`**:
 
@@ -214,11 +214,11 @@ Then the full pass — **run it under `caffeinate`**:
 caffeinate -i python3 scrape.py
 ```
 
-`caffeinate -i` stops the Mac idle-sleeping. Without it, a 100-minute unattended
+`caffeinate -i` stops the Mac idle-sleeping. Without it, a long unattended
 run dies the moment the screen sleeps, and you lose everything since the last
 save. There is no downside to always using it.
 
-75 queries, **about 100 minutes**. Leave Chrome running. You can cover the
+25 queries, **about 35 minutes**. Leave Chrome running. You can cover the
 window and use your Mac normally, but don't close that tab or navigate it.
 
 **If LinkedIn interrupts with a checkpoint** — "verify your identity", a captcha,
@@ -436,7 +436,10 @@ no indication why.
 
 ### 1. `queries.txt` — your field and cities
 
-75 queries of AI/ML terms crossed with Indian cities. Rewrite entirely.
+25 queries of AI/ML terms for Indian roles. Rewrite entirely. See "Query design"
+below for the pattern that produced this list, and `SUGGESTIONS.md` for how to
+track which of your own queries are actually worth keeping once you have real
+data to look at.
 
 ### 2. `harvest.js` → `CORE` / `ADJ` / `HARD` — relevance
 
@@ -483,7 +486,7 @@ LinkedIn's mangled addresses), all the scroll and pacing logic.
 
 ---
 
-## Query design — how the 75 are built, and how to build your own
+## Query design — how the 25 are built, and how to build your own
 
 ### The shape of the shipped set
 
@@ -499,14 +502,21 @@ ml engineer hiring bangalore        <- + city
 ml engineer hiring remote           <- + remote
 ```
 
-That gives exactly 75 from:
+That gives exactly 25 from:
 
 - **15 role terms** bare — `ml engineer`, `generative ai`, `ai ml`,
   `data scientist`, `llm engineer`, `data analyst`, `ai engineer`,
   `data engineer`, `machine learning`, `data science`, `ai developer`,
   `mlops engineer`, `computer vision`, `nlp engineer`, `genai engineer`
-- **10 of those** crossed with **6 locations** — bangalore, hyderabad, pune,
-  gurgaon, mumbai, remote → 60 more
+- **the 6 strongest of those** + `remote` — data scientist, llm engineer,
+  ai engineer, ml engineer, generative ai, ai ml
+- **the 4 strongest of those** + `bangalore` — ai engineer, data scientist,
+  generative ai, ai ml. Bangalore was the one city that consistently
+  outperformed the rest in measured runs (see below), so it's the only
+  one kept in the shipped set — an earlier version crossed all 15 role
+  terms with 6 cities each (90 extra queries) and most of that volume
+  was, empirically, close to wasted. Add more cities back for your own
+  market if bangalore-equivalent isn't where your roles concentrate.
 
 Every query runs against `datePosted=past-24h` and `sortBy=date_posted`, which
 `scrape.py` appends. You never write the URL yourself.
@@ -522,7 +532,7 @@ for" instead. Worth trying for your field: `hiring`, `we are hiring`, `openings`
 
 **1. Never quote.** `ai engineer hiring` returns roughly **3× more** than
 `"ai engineer hiring"`. Quoting forces exact adjacency and throws away
-*"hiring an AI Engineer"*. All 75 shipped queries are unquoted, deliberately.
+*"hiring an AI Engineer"*. All 25 shipped queries are unquoted, deliberately.
 
 **2. Bare beats city, by a lot.** Measured in one run:
 
@@ -562,11 +572,12 @@ because one wording underperformed.** Try the variants first.
    results and treat them as a bonus.
 5. **Test with `--limit 2` first**, then check `scrape_log.csv` — it records
    posts and leads per query, so after a couple of days you can see exactly
-   which queries earn their 78 seconds.
+   which queries earn their ~85 seconds. `SUGGESTIONS.md` has a small script
+   for ranking queries by actual yield once you have a few runs' worth of data.
 
 Order doesn't matter for yield; leads dedupe across queries automatically.
 
-**About size:** 75 queries ≈ 100 minutes. Fewer, better queries beat more weak
+**About size:** 25 queries ≈ 35 minutes. Fewer, better queries beat more weak
 ones — every query costs the same time whether it returns 106 posts or 1.
 
 ---

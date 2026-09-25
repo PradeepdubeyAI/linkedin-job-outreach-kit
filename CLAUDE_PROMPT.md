@@ -86,7 +86,7 @@ Work through this in order and stop at each checkpoint so I can confirm:
    config.json. Ask me for the App Passwords only when we get there — do not
    put them in any file other than config.json.
 4. Rewrite queries.txt for my field and country. Read the README's "Query
-   design" section first — it explains the exact pattern the shipped 75 use
+   design" section first — it explains the exact pattern the shipped 25 use
    (<role term> hiring [location], never quoted), and four measured lessons:
    never quote; bare queries hugely outperform city ones; "remote" is the one
    location worth keeping; tiny wording changes swing results 5x. Give me
@@ -183,20 +183,21 @@ prompt tells Claude to stop and ask rather than guess.
 | A LinkedIn account | logged into Chrome. An aged account is safer than a new one |
 | 1–3 Gmail accounts | you can log into. Claude walks you through App Passwords — don't pre-generate |
 | Your resume | as a PDF |
-| Time | ~30 min guided setup, then ~100 min per scrape (unattended — you can use your Mac) |
+| Time | ~30 min guided setup, then ~35 min per scrape (unattended — you can use your Mac) |
 
 ---
 
 ## Realistic expectations
 
-From one real 75-query run:
+Scaled from a real 75-query run (the shipped set is now 25 queries — expect
+roughly a third of this per scrape, not a fresh independent measurement):
 
 | | |
 |---|---|
-| Posts scanned | ~2,300 |
-| Leads extracted | 406 |
-| With an email address | 176 |
-| **Actually emailed** | **113** |
+| Posts scanned | ~750 |
+| Leads extracted | ~135 |
+| With an email address | ~60 |
+| **Actually emailed** | **~38** |
 
 The attrition is real, not a bug. The gap is job seekers rather than recruiters,
 people already contacted, wrong-field roles, and dead domains. Filtering hard is
