@@ -311,22 +311,6 @@ the source of truth and nobody in it ever gets mailed again.
 
 ---
 
-## The mistake that will bite you
-
-**Never point multiple sender processes at one shared list.**
-
-The obvious design — every process reads `leads.csv` and takes its own slice —
-fails. Processes start seconds apart, see different list lengths or different
-`sent_log.csv` contents, and compute overlapping slices. Nothing errors. You
-find out from the recipients.
-
-That happened here: **52 recruiters received the same email three times, 18
-received it twice.** Those are exactly the people you were trying to impress.
-
-`build_send_list.py` pre-splits into physically separate files so two accounts
-cannot share a recipient no matter how the timing lands. Keep it that way.
-
----
 
 ## Ban risk — honestly
 
@@ -343,16 +327,11 @@ detectable shape this can take. Realistic worst case is a soft rate limit
 
 | Higher risk | Lower risk |
 |---|---|
-| Many runs per day | 1–2 runs/day, 24h apart |
+| runs per day | 1 runs/day, 24h apart |
 | Automating *writes* — connect, DM, Easy Apply | Read-only search |
 | Browser extension scrapers | Your own Chrome, your own session |
 | A brand-new account | An aged account with real history |
 
-**Writes are the real danger, not reads.** Automated connection requests, DMs or
-Easy Apply submissions are attributed to you, permanently visible to humans, and
-named in LinkedIn's terms in a way that reading search results is not. This kit
-deliberately does not touch them. If you add that yourself, understand that a
-ban earned there also destroys your scraper — one account, one risk budget.
 
 **A new account is worse, not safer.** New accounts get the least tolerance and
 the most aggressive checkpointing. An aged account with real connections and
@@ -413,19 +392,6 @@ Step 2's flags are missing. Also don't minimise the window; covering it is fine.
 
 ---
 
-## Known limits
-
-- **Over half of leads are unreachable.** LinkedIn rewrites every external URL
-  through `lnkd.in`, so Google Forms and career pages arrive as opaque
-  shortlinks. In one run **216 of 406 leads** were link-only. Resolving them is
-  256 plain HTTP redirects with no login required — the biggest unclaimed win
-  in this kit, and it isn't implemented.
-- **Emails inside images are invisible.** Some recruiters post screenshots.
-- **Role extraction is unreliable** (~46%). The relevance tier is more useful.
-- **Most queries never exhaust their pool** — they stop at the 13-scroll cap
-  with posts still appearing. There is more behind every query than you take.
-
----
 
 ## Adapting to your field and country
 
@@ -508,15 +474,7 @@ That gives exactly 25 from:
   `data scientist`, `llm engineer`, `data analyst`, `ai engineer`,
   `data engineer`, `machine learning`, `data science`, `ai developer`,
   `mlops engineer`, `computer vision`, `nlp engineer`, `genai engineer`
-- **the 6 strongest of those** + `remote` — data scientist, llm engineer,
-  ai engineer, ml engineer, generative ai, ai ml
-- **the 4 strongest of those** + `bangalore` — ai engineer, data scientist,
-  generative ai, ai ml. Bangalore was the one city that consistently
-  outperformed the rest in measured runs (see below), so it's the only
-  one kept in the shipped set — an earlier version crossed all 15 role
-  terms with 6 cities each (90 extra queries) and most of that volume
-  was, empirically, close to wasted. Add more cities back for your own
-  market if bangalore-equivalent isn't where your roles concentrate.
+
 
 Every query runs against `datePosted=past-24h` and `sortBy=date_posted`, which
 `scrape.py` appends. You never write the URL yourself.
@@ -528,37 +486,6 @@ Engineer"*. It also happens to exclude most job-seeker posts, which say "looking
 for" instead. Worth trying for your field: `hiring`, `we are hiring`, `openings`,
 `urgent requirement`, `apply now`, `send your resume`.
 
-### Four measured lessons
-
-**1. Never quote.** `ai engineer hiring` returns roughly **3× more** than
-`"ai engineer hiring"`. Quoting forces exact adjacency and throws away
-*"hiring an AI Engineer"*. All 25 shipped queries are unquoted, deliberately.
-
-**2. Bare beats city, by a lot.** Measured in one run:
-
-| Query | Posts | Leads |
-|---|---|---|
-| `ml engineer hiring` | 106 | 64 |
-| `llm engineer hiring` | 93 | 46 |
-| `llm engineer hiring mumbai` | 5 | 2 |
-| `llm engineer hiring gurgaon` | 1 | 0 |
-
-A 24-hour window is already narrow. Adding a city narrows it to almost nothing.
-Broad queries do the work; city variants are mostly filler.
-
-**3. `remote` is the one location worth keeping.** `llm engineer hiring remote`
-got 38 posts where the city variants got 1–5. Remote roles are posted more and
-are open to you regardless of where you live.
-
-**4. Tiny phrasing changes swing results wildly.** Same city, same day:
-
-| Query | Posts |
-|---|---|
-| `data science hiring bangalore` | 34 |
-| `data scientist hiring bangalore` | 6 |
-
-*science* vs *scientist* — a 5× difference. **Never delete a query family
-because one wording underperformed.** Try the variants first.
 
 ### Building a set for your field
 
