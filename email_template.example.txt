@@ -1,0 +1,33 @@
+Subject: AI Engineer / Data Scientist — Exploring Roles
+
+Hi,
+
+I hope you're doing well. I'm YOUR NAME, having N+ years of experience in
+YOUR DOMAIN, currently a YOUR TITLE at YOUR COMPANY, where I ONE LINE ON WHAT
+YOU ACTUALLY BUILD.
+
+I'm exploring full-time TARGET ROLE roles. I'd really appreciate any referrals
+or insights — happy to share more or connect briefly.
+
+Below is a quick summary of my experience:
+
+At COMPANY 1:
+Two or three concrete sentences. Name the systems you shipped and the stack.
+Concrete beats adjectives — "multi-agent LangGraph fact-checking system with
+automated evidence retrieval" lands, "passionate about AI" does not.
+
+At COMPANY 2:
+Same again. Include a number if you have an honest one.
+
+Projects:
+- PROJECT ONE — stack, stack, stack
+- PROJECT TWO — stack, stack, stack
+
+Resume:
+YOUR PUBLIC RESUME LINK
+
+Best regards,
+YOUR NAME
+YOUR TITLE, YOUR COMPANY
+your.email@gmail.com
++91-XXXXXXXXXX

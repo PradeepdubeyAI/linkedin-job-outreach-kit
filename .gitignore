@@ -1,0 +1,16 @@
+# credentials — never commit
+config.json
+
+# your own documents
+*.pdf
+
+# harvested data: third-party personal contact details. Do not share or commit.
+leads.csv
+send_list.csv
+send_a*.csv
+sent_log.csv
+failed_log.csv
+scrape_log.csv
+lead_report.html
+*.log
+__pycache__/

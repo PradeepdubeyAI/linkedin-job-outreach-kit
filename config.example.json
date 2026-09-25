@@ -1,0 +1,27 @@
+{
+  "sender_name": "YOUR FULL NAME",
+  "resume_file": "resume.pdf",
+  "_seeds_note": "Your OWN inboxes, so you can see where your mail actually lands (Inbox vs Spam). Injected at seed_positions within each account's queue. NOTE: a position larger than that account's batch never fires - if each account only sends 40, use something like [1, 20, 40], not [1, 120, 240]. Seeds are not counted as real sends and are never written to sent_log.csv.",
+  "seed_addresses": [
+    "your.other.address@gmail.com",
+    "your.university.address@example.edu"
+  ],
+  "seed_positions": [
+    1,
+    20,
+    40
+  ],
+  "_caps_note": "Gmail free tier hard-limits ~500 recipients/day per account. 370 leaves headroom for your normal personal mail. NEVER raise this to 500.",
+  "accounts": [
+    {
+      "email": "account1@gmail.com",
+      "app_password": "xxxx xxxx xxxx xxxx",
+      "daily_cap": 370
+    },
+    {
+      "email": "account2@gmail.com",
+      "app_password": "xxxx xxxx xxxx xxxx",
+      "daily_cap": 370
+    }
+  ]
+}
